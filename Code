@@ -1,0 +1,56 @@
+#include <Arduino.h>
+#include <Servo.h>
+Servo engine;// Define the servo object for motor control
+int criticalDistance = 15;// Critical distance threshold in centimeters for obstacle detection
+int i = 0;// Variable to store the current angle of the servo motor
+bool direction;// Direction flag for servo movement (0: increasing/forward, 1: decreasing/backward)
+
+void setup() {
+  pinMode(8, OUTPUT);//buzzer
+  pinMode(9,INPUT);//HCSR04 input(echo)
+  pinMode(10,OUTPUT);//HCSR04 output(trig)
+  engine.attach(11);// servo pin
+
+}
+
+void loop() {
+  digitalWrite(10,LOW);// Clear the trigger pin of the ultrasonic sensor
+  delayMicroseconds(2); 
+
+  digitalWrite(10,HIGH); // Send a 10-microsecond high pulse to trigger the sensor
+  delayMicroseconds(10);
+  digitalWrite(10,LOW);
+
+  long duration = pulseIn(9,HIGH);// Read the travel time of the sound wave in microseconds
+  float distance = duration * 0.034 /2;// Calculate distance in centimeters based on sound speed
+
+  if (distance > criticalDistance)// If the measured distance is greater than the critical threshold, keep scanning
+  {
+    engine.write(i);
+    if (i==180){// Reverse direction and beep if the servo reaches 180 degrees
+      direction=1;
+      digitalWrite(8,HIGH);
+      delay(100);
+      digitalWrite(8,LOW);
+    }
+    else if(i==0){// Reverse direction and beep if the servo reaches 0 degrees
+      direction=0;
+      digitalWrite(8,HIGH);
+      delay(100);
+      digitalWrite(8,LOW);
+    }
+
+    if (direction==1)
+      i--;
+    else
+      i++;
+
+  }
+  // Trigger a buzzer warning if an object is within the critical distance
+  else{
+  digitalWrite(8,HIGH);
+  delay(200);
+  digitalWrite(8,LOW);
+  }
+  delay(15);
+}

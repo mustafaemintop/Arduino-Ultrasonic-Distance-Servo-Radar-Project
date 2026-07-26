@@ -12,7 +12,7 @@ https://drive.google.com/drive/folders/18v8vjLJ4sNY1U6dla2HtMcbJRe8v4p6J?usp=sha
 * HC-SR04 Ultrasonic Sensor
 * SG90 Servo Motor (referred to as `engine` in the code)
 * Buzzer
-* 4x AA Battery Holder( if you have 2x 2x Battery Holder You can use them by connecting them in series.
+* 4x AA Battery Holder( if you have 2x 2x Battery Holder You can use them by connecting them in series.)
 * Breadboard & Jumper Wires 
 
 ---
